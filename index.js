@@ -159,9 +159,6 @@ async function main() {
 
         let output = '\n';
 
-        // header
-        output += chalk.bold.hex('#A0A0A0')(` ------------------------------------ \n`);
-
         // Capitalize for display
         const displayCity = city.charAt(0).toUpperCase() + city.slice(1);
         output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${nextPrayerName}`) + '\n';

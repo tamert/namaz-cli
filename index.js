@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
 import Table from 'cli-table3';
-import { format, differenceInSeconds, parse, addDays, isAfter } from 'date-fns';
+import { differenceInSeconds, parse, addDays, isAfter } from 'date-fns';
 import logUpdate from 'log-update';
 import Conf from 'conf';
 import prompts from 'prompts';
@@ -13,21 +13,7 @@ import prompts from 'prompts';
 const METHOD = 13; // Diyanet
 
 const config = new Conf({ projectName: 'namaz-cli' });
-const HIJRI_MONTHS_TR = {
-    1: 'Muharrem', 2: 'Safer', 3: 'Rebiülevvel', 4: 'Rebiülahir',
-    5: 'Cemaziyelevvel', 6: 'Cemaziyelahir', 7: 'Recep', 8: 'Şaban',
-    9: 'Ramazan', 10: 'Şevval', 11: 'Zilkade', 12: 'Zilhicce'
-};
 
-const MOSQUE_ASCII = `
-          _  _
-         ( )( )     ${chalk.yellow('🌙')}
-  _ _ _  | || |  _ _ _
- | | | | | || | | | | |
- |     |_|    |_|     |
- |                    |
- |____________________|
-`;
 
 async function getPrayerTimes(city, country) {
     try {
@@ -164,7 +150,7 @@ async function main() {
         output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${nextPrayerName}`) + '\n';
 
         const bigTime = figlet.textSync(nextPrayerCountdownStr, { font: 'Big' });
-        output += gradient(['#E0E0E0', '#B0B0B0']).multiline(bigTime) + '\n';
+        output += gradient(['#1980A9', '#F38B94']).multiline(bigTime) + '\n';
 
         if (isRamadan) {
             const ramadanDiff = differenceInSeconds(ramadanTime, now);
@@ -173,9 +159,6 @@ async function main() {
         } else {
             output += '\n\n';
         }
-
-        const hijriMonth = HIJRI_MONTHS_TR[hijri.month.number] || hijri.month.en;
-        const dateStr = `${hijri.day} ${hijriMonth} ${hijri.year}`;
 
         const table = new Table({
             colWidths: [18, 18, 18],
@@ -196,7 +179,7 @@ async function main() {
         );
 
         output += table.toString() + '\n';
-        output += chalk.hex('#11c41d')(`\n
+        output += gradient(['#E0E0E0', '#1980A9', '#F38B94']).multiline(`\n
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⠿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⠛⢻⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡟⠛⢻⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⡀⠀⠀⠀⠀⠀⠀⡇⠉⢹⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠉⢹⠀⠀⠀⠀⠀⠀⠀⠀⠀

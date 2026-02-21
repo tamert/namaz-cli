@@ -7,11 +7,12 @@ import gradient from 'gradient-string';
 import Table from 'cli-table3';
 import { format, differenceInSeconds, parse, addDays, isAfter } from 'date-fns';
 import logUpdate from 'log-update';
+import Conf from 'conf';
+import prompts from 'prompts';
 
-const CITY = 'İzmir';
-const COUNTRY = 'Turkey';
 const METHOD = 13; // Diyanet
 
+const config = new Conf({ projectName: 'namaz-cli' });
 const HIJRI_MONTHS_TR = {
     1: 'Muharrem', 2: 'Safer', 3: 'Rebiülevvel', 4: 'Rebiülahir',
     5: 'Cemaziyelevvel', 6: 'Cemaziyelahir', 7: 'Recep', 8: 'Şaban',
@@ -28,12 +29,12 @@ const MOSQUE_ASCII = `
  |____________________|
 `;
 
-async function getPrayerTimes() {
+async function getPrayerTimes(city, country) {
     try {
         const response = await axios.get(`https://api.aladhan.com/v1/timingsByCity`, {
             params: {
-                city: 'Izmir', // API doesn't like special chars usually
-                country: 'Turkey',
+                city: city,
+                country: country,
                 method: METHOD
             }
         });
@@ -50,17 +51,62 @@ function formatDuration(seconds) {
     return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+async function setupConfig() {
+    let savedCity = config.get('city');
+    let savedCountry = config.get('country');
+
+    if (process.argv.includes('--reset')) {
+        config.clear();
+        savedCity = null;
+        savedCountry = null;
+    }
+
+    if (!savedCity || !savedCountry) {
+        console.log(chalk.green('Namaz CLI İlk Kurulum\n'));
+        const response = await prompts([
+            {
+                type: 'text',
+                name: 'country',
+                message: 'Hangi ülkede yaşıyorsunuz? (Örn: Turkey, Germany)',
+                initial: 'Turkey'
+            },
+            {
+                type: 'text',
+                name: 'city',
+                message: 'Hangi şehirde yaşıyorsunuz? (İngilizce karakter, örn: Izmir, Istanbul, Berlin)',
+                initial: 'Istanbul'
+            }
+        ]);
+
+        if (!response.city || !response.country) {
+            console.log(chalk.red('Kurulum iptal edildi.'));
+            process.exit(1);
+        }
+
+        config.set('city', response.city);
+        config.set('country', response.country);
+
+        savedCity = response.city;
+        savedCountry = response.country;
+        console.log('\n');
+    }
+
+    return { city: savedCity, country: savedCountry };
+}
+
 async function main() {
-    let data = await getPrayerTimes();
+    const { city, country } = await setupConfig();
+
+    let data = await getPrayerTimes(city, country);
 
     setInterval(async () => {
-        const newData = await getPrayerTimes();
+        const newData = await getPrayerTimes(city, country);
         if (newData) data = newData;
     }, 3600000);
 
     const loop = () => {
         if (!data) {
-            console.log(chalk.yellow('Veri yükleniyor...'));
+            logUpdate(chalk.yellow('Veri yükleniyor veya ağ hatası. Lütfen bekleyin...'));
             setTimeout(loop, 1000);
             return;
         }
@@ -110,7 +156,9 @@ async function main() {
         const countdownStr = formatDuration(diffSeconds);
 
         let output = '\n';
-        output += chalk.bold.hex('#A0A0A0')(`${CITY} - ${targetPrayer}`) + '\n';
+        // Capitalize for display
+        const displayCity = city.charAt(0).toUpperCase() + city.slice(1);
+        output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${targetPrayer}`) + '\n';
 
         const bigTime = figlet.textSync(countdownStr, { font: 'Big' });
         output += gradient(['#E0E0E0', '#B0B0B0']).multiline(bigTime) + '\n';

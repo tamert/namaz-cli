@@ -6,6 +6,7 @@ Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve A
 
 ## Özellikler
 
+- **İlk Kurulum Sihirbazı:** İlk çalıştırıldığında bulunduğunuz ülke ve şehri sorar ve kaydeder (değiştirmek için `--reset` kullanabilirsiniz).
 - **Canlı Geri Sayım:** Sahura, İftara (Ramazan'da) veya bir sonraki vakte kalan süreyi saniye saniye akıcı bir şekilde gösterir.
 - **Diyanet Uyumlu Veri:** `aladhan.com` API'si üzerinden Diyanet İşleri Başkanlığı'nın hesaplamalarını (Method 13) baz alır.
 - **Ramazan Modu:** Güncel hicri aya göre (9. ay Ramazan) sahur ve iftar etiketlerine tam uyumlu çalışır. Gece saatlerinde doğrudan doğru güne sahur atamasını yapar.
@@ -16,6 +17,8 @@ Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve A
   - Yeşil detaylarla süslenmiş büyük özel ASCII cami figürü.
 - **Hicri Takvim Çevirisi:** Bulunduğunuz güne ait çevrilmiş Türkçe hicri ay ve gün bilgisi sağlar.
 
+![Ekran Görüntüsü](screenshot.png)
+
 ## Kurulum ve Kullanım
 
 Proje `package.json` üzerinden CLI komutu olarak ayarlanmıştır. Çalıştırmak için şu adımları izleyebilirsiniz:
@@ -23,7 +26,7 @@ Proje `package.json` üzerinden CLI komutu olarak ayarlanmıştır. Çalıştır
 ### 1. Klonlama ve Yüklme
 \`\`\`bash
 # Projeyi bilgisayarınıza indirin
-git clone https://github.com/KULLANICI_ADINIZ/namaz-cli.git
+git clone https://github.com/tamert/namaz-cli.git
 cd namaz-cli
 
 # Bağımlılıkları yükleyin
@@ -45,13 +48,11 @@ npm link
 namaz
 \`\`\`
 
-## Özelleştirme
+## Ayarları Değiştirme
+Yanlış bir ülke/şehir girdiyseniz veya konumunuzu değiştirdiyseniz ayarları sıfırlamak için `--reset` bayrağını kullanabilirsiniz:
 
-`index.js` içerisindeki şu sabitleri değiştirerek kendi lokasyonunuzu tanımlayabilirsiniz:
-
-\`\`\`javascript
-const CITY = 'İzmir';
-const COUNTRY = 'Turkey';
+\`\`\`bash
+namaz --reset
 \`\`\`
 
 ## Bağımlılıklar (Teşekkürler!)

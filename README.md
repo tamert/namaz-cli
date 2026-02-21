@@ -24,36 +24,38 @@ Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve A
 Proje `package.json` üzerinden CLI komutu olarak ayarlanmıştır. Çalıştırmak için şu adımları izleyebilirsiniz:
 
 ### 1. Klonlama ve Yüklme
-\`\`\`bash
+```bash
 # Projeyi bilgisayarınıza indirin
 git clone https://github.com/tamert/namaz-cli.git
 cd namaz-cli
 
 # Bağımlılıkları yükleyin
 npm install
-\`\`\`
+```
 
 ### 2. Çalıştırma
 Projeyi global kurulum yapmadan test etmek isterseniz:
-\`\`\`bash
+```bash
 node index.js
-\`\`\`
+```
 
 Terminalinizde her yerden komut olarak çalıştırabilmek için global (link) bağlantısı verebilirsiniz:
-\`\`\`bash
+```bash
 # Klasör içindeyken terminale global bir komut eklemek için
 npm link
+```
 
 # Artık her yerden bu komutla çalıştırabilirsiniz:
+```bash
 namaz
-\`\`\`
+```
 
 ## Ayarları Değiştirme
 Yanlış bir ülke/şehir girdiyseniz veya konumunuzu değiştirdiyseniz ayarları sıfırlamak için `--reset` bayrağını kullanabilirsiniz:
 
-\`\`\`bash
+```bash
 namaz --reset
-\`\`\`
+```
 
 ## Bağımlılıklar (Teşekkürler!)
 

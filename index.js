@@ -118,7 +118,7 @@ async function main() {
 
         const parseTime = (t) => parse(t, 'HH:mm', now);
         const times = {
-            'İmsak': parseTime(timings.Imsak),
+            'İmsak': parseTime(timings.Fajr),
             'Güneş': parseTime(timings.Sunrise),
             'Öğle': parseTime(timings.Dhuhr),
             'İkindi': parseTime(timings.Asr),
@@ -191,7 +191,7 @@ async function main() {
         const c = (name, time) => `${chalk.gray(name.padEnd(7))} ${chalk.white.bold(time)}`;
 
         table.push(
-            [c('İmsak', timings.Imsak), c('Güneş', timings.Sunrise), c('Öğle', timings.Dhuhr)],
+            [c('İmsak', timings.Fajr), c('Güneş', timings.Sunrise), c('Öğle', timings.Dhuhr)],
             [c('İkindi', timings.Asr), c('Akşam', timings.Maghrib), c('Yatsı', timings.Isha)]
         );
 

@@ -9,6 +9,14 @@ import { differenceInSeconds, parse, addDays, isAfter } from 'date-fns';
 import logUpdate from 'log-update';
 import Conf from 'conf';
 import prompts from 'prompts';
+import readline from 'readline';
+
+const FONTS = [
+    'Modular', 'Big', 'Shadow', 'Tmplr', 'Cricket', 'Graceful', 'Shimrod', 'Mono 9', 'Graffiti', 'Morse', 'Slant', 'Banner3', 'Banner4', 'Henry 3D', 'Basic', 'Small Block', 'Nancyj-Fancy', 'Small Mono 9', 'Invita'
+];
+
+let currentFontIndex = FONTS.indexOf('Big');
+if (currentFontIndex === -1) currentFontIndex = 0;
 
 const METHOD = 13; // Diyanet
 
@@ -83,6 +91,21 @@ async function setupConfig() {
 async function main() {
     const { city, country } = await setupConfig();
 
+    readline.emitKeypressEvents(process.stdin);
+    if (process.stdin.isTTY) {
+        process.stdin.setRawMode(true);
+    }
+    process.stdin.on('keypress', (str, key) => {
+        if (key.ctrl && key.name === 'c') {
+            process.exit();
+        }
+        if (str && str.toLowerCase() === 'f') {
+            currentFontIndex = (currentFontIndex + 1) % FONTS.length;
+            // Immediate re-render isn't strictly necessary as the interval runs every second,
+            // but logUpdate will refresh naturally within <= 1000ms.
+        }
+    });
+
     let data = await getPrayerTimes(city, country);
 
     setInterval(async () => {
@@ -147,9 +170,15 @@ async function main() {
 
         // Capitalize for display
         const displayCity = city.charAt(0).toUpperCase() + city.slice(1);
-        output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${nextPrayerName}`) + '\n';
+        output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${nextPrayerName}`) + chalk.dim(` [Font: ${FONTS[currentFontIndex]}]`) + '\n';
 
-        const bigTime = figlet.textSync(nextPrayerCountdownStr, { font: 'Big' });
+        let bigTimeText = '';
+        try {
+            bigTimeText = figlet.textSync(nextPrayerCountdownStr, { font: FONTS[currentFontIndex] });
+        } catch (err) {
+            bigTimeText = figlet.textSync(nextPrayerCountdownStr, { font: 'Big' }); // fallback
+        }
+        const bigTime = bigTimeText;
         output += gradient(['#1980A9', '#F38B94']).multiline(bigTime) + '\n';
 
         if (isRamadan) {

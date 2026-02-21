@@ -1,72 +1,87 @@
 # Namaz CLI 🌙
 
-Terminal ekranından, şık bir tasarımla Günlük Ezan Vakitlerini ve İftar/Sahur geri sayımını takip edebileceğiniz bir Node.js CLI aracıdır.
+Terminal ekranından, şık bir tasarımla günlük ezan vakitlerini ve İftar/Sahur geri sayımını takip edebileceğiniz bir Node.js CLI uygulamasıdır.
 
-Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve ASCII sanatı ile terminalinize estetik bir dokunuş katar. Özellikle Ramazan ayında "Sahura Kalan" ve "İftara Kalan" süreleri otomatik olarak hesaplar.
+Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve ASCII sanatı ile terminalinize estetik bir dokunuş katar. Özellikle Ramazan ayında "Sahura Kalan" ve "İftara Kalan" sürelerini otomatik olarak hesaplar ve gösterir.
 
-## Özellikler
+## ✨ Özellikler
 
-- **İlk Kurulum Sihirbazı:** İlk çalıştırıldığında bulunduğunuz ülke ve şehri sorar ve kaydeder (değiştirmek için `--reset` kullanabilirsiniz).
-- **Canlı Geri Sayım:** Sahura, İftara (Ramazan'da) veya bir sonraki vakte kalan süreyi saniye saniye akıcı bir şekilde gösterir.
-- **Diyanet Uyumlu Veri:** `aladhan.com` API'si üzerinden Diyanet İşleri Başkanlığı'nın hesaplamalarını (Method 13) baz alır.
-- **Ramazan Modu:** Güncel hicri aya göre (9. ay Ramazan) sahur ve iftar etiketlerine tam uyumlu çalışır. Gece saatlerinde doğrudan doğru güne sahur atamasını yapar.
-- **Şık Tasarım:** 
-  - `figlet` ve `gradient-string` ile yazılmış büyük renkli fontlar.
-  - `cli-table3` ile muntazam ve hizalanmış vakit çizelgesi tablosu.
-  - `log-update` ile ekran dalgalanması yapmayan pürüzsüz animasyonlar.
-  - Yeşil detaylarla süslenmiş büyük özel ASCII cami figürü.
-- **Hicri Takvim Çevirisi:** Bulunduğunuz güne ait çevrilmiş Türkçe hicri ay ve gün bilgisi sağlar.
+- **İlk Kurulum Sihirbazı:** İlk çalıştırıldığında bulunduğunuz ülke ve şehri sorar ve kaydeder (değiştirmek için `--reset` bayrağını kullanabilirsiniz).
+- **Canlı Geri Sayım:** Sahura, iftara (Ramazan'da) veya bir sonraki vakte kalan süreyi saniye saniye akıcı bir şekilde gösterir.
+- **Diyanet Uyumlu Veri:** Aladhan API üzerinden Diyanet İşleri Başkanlığı'nın hesaplama yöntemini (Method 13) kullanır.
+- **Ramazan Modu:** Hicri takvime göre Ramazan ayında (9. ay) sahur ve iftar etiketlerine tam uyumlu çalışır. Gece saatlerinde otomatik olarak ertesi günün sahur vaktini gösterir.
+- **Font Değiştirme:** Uygulama çalışırken **F** tuşuna basarak 19 farklı ASCII font stili arasında geçiş yapabilirsiniz.
+- **Şık ve Minimalist Tasarım:**
+  - `figlet` ve `gradient-string` ile yazılmış büyük renkli fontlar
+  - `cli-table3` ile düzenli ve hizalanmış vakit çizelgesi tablosu
+  - `log-update` ile ekran titremesi olmayan pürüzsüz animasyonlar
+  - Renkli gradyan geçişli ASCII cami figürü
+- **Hicri Takvim Desteği:** Bulunduğunuz güne ait Türkçe hicri ay ve gün bilgisi gösterir.
 
 ![Ekran Görüntüsü](screenshot.png)
 
-## Kurulum ve Kullanım
+## 📦 Kurulum
 
-Proje `package.json` üzerinden CLI komutu olarak ayarlanmıştır. Çalıştırmak için şu adımları izleyebilirsiniz:
-
-### 1. Klonlama ve Yüklme
+### 1. Projeyi İndirin
 ```bash
-# Projeyi bilgisayarınıza indirin
 git clone https://github.com/tamert/namaz-cli.git
 cd namaz-cli
+```
 
-# Bağımlılıkları yükleyin
+### 2. Bağımlılıkları Yükleyin
+```bash
 npm install
 ```
 
-### 2. Çalıştırma
-Projeyi global kurulum yapmadan test etmek isterseniz:
+### 3. Global Kurulum (Opsiyonel)
+Terminalinizde her yerden `namaz` komutuyla çalıştırabilmek için:
 ```bash
-node index.js
-```
-
-Terminalinizde her yerden komut olarak çalıştırabilmek için global (link) bağlantısı verebilirsiniz:
-```bash
-# Klasör içindeyken terminale global bir komut eklemek için
 npm link
 ```
 
-# Artık her yerden bu komutla çalıştırabilirsiniz:
+## 🚀 Kullanım
+
+### Temel Kullanım
 ```bash
+# Global kurulum yaptıysanız
 namaz
+
+# Veya direkt olarak
+node index.js
 ```
 
-## Ayarları Değiştirme
-Yanlış bir ülke/şehir girdiyseniz veya konumunuzu değiştirdiyseniz ayarları sıfırlamak için `--reset` bayrağını kullanabilirsiniz:
-
+### Ayarları Sıfırlama
+Yanlış ülke/şehir girdiyseniz veya konumunuzu değiştirmek istiyorsanız:
 ```bash
 namaz --reset
 ```
 
-## Bağımlılıklar (Teşekkürler!)
+### Klavye Kısayolları
+- **F tuşu:** Font stilini değiştir (19 farklı font arasında geçiş)
+- **Ctrl+C:** Uygulamadan çık
 
-Bu projenin oluşmasını sağlayan modüller:
-- [axios](https://www.npmjs.com/package/axios) - API İstekleri
-- [chalk](https://www.npmjs.com/package/chalk) - Renklendirmeler
-- [figlet](https://www.npmjs.com/package/figlet) - ASCII Rakam Fontları
-- [gradient-string](https://www.npmjs.com/package/gradient-string) - Geçişli Renkler
-- [cli-table3](https://www.npmjs.com/package/cli-table3) - Tablo Çizimleri
-- [date-fns](https://www.npmjs.com/package/date-fns) - Hata payı barındırmayan Date hesaplamaları
-- [log-update](https://www.npmjs.com/package/log-update) - Akıcı terminal refresh yapısı
+## 🛠️ Teknolojiler
 
-## Lisans
+Bu proje aşağıdaki harika kütüphaneler kullanılarak geliştirilmiştir:
+
+- [axios](https://www.npmjs.com/package/axios) - API istekleri
+- [chalk](https://www.npmjs.com/package/chalk) - Terminal renklendirme
+- [figlet](https://www.npmjs.com/package/figlet) - ASCII art fontları
+- [gradient-string](https://www.npmjs.com/package/gradient-string) - Gradyan renkler
+- [cli-table3](https://www.npmjs.com/package/cli-table3) - Terminal tabloları
+- [date-fns](https://www.npmjs.com/package/date-fns) - Tarih/saat hesaplamaları
+- [log-update](https://www.npmjs.com/package/log-update) - Titremesiz terminal güncellemeleri
+- [conf](https://www.npmjs.com/package/conf) - Kullanıcı ayarları yönetimi
+- [prompts](https://www.npmjs.com/package/prompts) - İnteraktif komut satırı promptları
+
+## 📝 Lisans
+
 ISC
+
+## 🤝 Katkıda Bulunma
+
+Katkılarınızı bekliyoruz! Pull request göndermekten çekinmeyin.
+
+---
+
+**Not:** Ezan vakitleri [Aladhan API](https://aladhan.com/prayer-times-api) üzerinden Diyanet İşleri Başkanlığı hesaplama yöntemiyle alınmaktadır.

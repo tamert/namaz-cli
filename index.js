@@ -126,43 +126,52 @@ async function main() {
             'Yatsı': parseTime(timings.Isha),
         };
 
-        let targetPrayer = 'Akşam';
-        let countdownLabel = 'Akşama Kalan';
-        let targetTime = times['Akşam'];
+        let nextPrayerName = 'İmsak';
+        let nextPrayerTime = addDays(times['İmsak'], 1);
 
-        if (isRamadan) {
-            if (isAfter(now, times['Akşam'])) {
-                targetPrayer = 'İmsak';
-                countdownLabel = 'Sahura Kalan';
-                targetTime = addDays(times['İmsak'], 1);
-            } else if (isAfter(now, times['İmsak'])) {
-                targetPrayer = 'Akşam';
-                countdownLabel = 'İftara Kalan';
-                targetTime = times['Akşam'];
-            } else {
-                targetPrayer = 'İmsak';
-                countdownLabel = 'Sahura Kalan';
-                targetTime = times['İmsak'];
-            }
-        } else {
-            if (isAfter(now, times['Akşam'])) {
-                targetPrayer = 'İmsak';
-                countdownLabel = 'Yarın İmsaka';
-                targetTime = addDays(times['İmsak'], 1);
+        const prayerNames = ['İmsak', 'Güneş', 'Öğle', 'İkindi', 'Akşam', 'Yatsı'];
+        for (const name of prayerNames) {
+            if (isAfter(times[name], now)) {
+                nextPrayerName = name;
+                nextPrayerTime = times[name];
+                break;
             }
         }
 
-        const diffSeconds = differenceInSeconds(targetTime, now);
-        const countdownStr = formatDuration(diffSeconds);
+        let ramadanLabel = null;
+        let ramadanTime = null;
+
+        if (isRamadan) {
+            if (isAfter(now, times['Akşam'])) {
+                ramadanLabel = 'Sahura Kalan';
+                ramadanTime = addDays(times['İmsak'], 1);
+            } else if (isAfter(now, times['İmsak'])) {
+                ramadanLabel = 'İftara Kalan';
+                ramadanTime = times['Akşam'];
+            } else {
+                ramadanLabel = 'Sahura Kalan';
+                ramadanTime = times['İmsak'];
+            }
+        }
+
+        const nextPrayerDiff = differenceInSeconds(nextPrayerTime, now);
+        const nextPrayerCountdownStr = formatDuration(nextPrayerDiff);
 
         let output = '\n';
         // Capitalize for display
         const displayCity = city.charAt(0).toUpperCase() + city.slice(1);
-        output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${targetPrayer}`) + '\n';
+        output += chalk.bold.hex('#A0A0A0')(`${displayCity} - ${nextPrayerName}`) + '\n';
 
-        const bigTime = figlet.textSync(countdownStr, { font: 'Big' });
+        const bigTime = figlet.textSync(nextPrayerCountdownStr, { font: 'Big' });
         output += gradient(['#E0E0E0', '#B0B0B0']).multiline(bigTime) + '\n';
-        output += chalk.hex('#A0A0A0')(`${countdownLabel} ${countdownStr}\n\n`);
+
+        if (isRamadan) {
+            const ramadanDiff = differenceInSeconds(ramadanTime, now);
+            const ramadanCountdownStr = formatDuration(ramadanDiff);
+            output += chalk.hex('#A0A0A0')(`${ramadanLabel} ${ramadanCountdownStr}\n\n`);
+        } else {
+            output += '\n\n';
+        }
 
         const hijriMonth = HIJRI_MONTHS_TR[hijri.month.number] || hijri.month.en;
         const dateStr = `${hijri.day} ${hijriMonth} ${hijri.year}`;

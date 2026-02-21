@@ -18,7 +18,7 @@ Pır pır etmeyen (flicker-free) akıcı animasyonu, büyük saat fontları ve A
   - Renkli gradyan geçişli ASCII cami figürü
 - **Hicri Takvim Desteği:** Bulunduğunuz güne ait Türkçe hicri ay ve gün bilgisi gösterir.
 
-![Ekran Görüntüsü](screenshot.png)
+![Ekran Görüntüsü](screenshot21022026.png)
 
 ## 📦 Kurulum
 
